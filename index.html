@@ -287,6 +287,49 @@ mediaInput.addEventListener('change', () => {
   setPostMessage('Allegato pronto per la pubblicazione.');
 });
 
+async function refreshPostInteractions(post,like,comment,share){
+  const [{count:likes,error:likesError},{count:comments,error:commentsError},{count:shares,error:sharesError}] = await Promise.all([
+    supabaseClient.from('post_likes').select('id',{count:'exact',head:true}).eq('post_id',post.id),
+    supabaseClient.from('post_comments').select('id',{count:'exact',head:true}).eq('post_id',post.id),
+    supabaseClient.from('post_shares').select('id',{count:'exact',head:true}).eq('post_id',post.id)
+  ]);
+  if(likesError||commentsError||sharesError){console.error('Conteggi interazioni',likesError||commentsError||sharesError);return;}
+  let liked=false,shared=false;
+  if(currentUser){
+    const [{data:l},{data:s}]=await Promise.all([
+      supabaseClient.from('post_likes').select('id').eq('post_id',post.id).eq('user_id',currentUser.id).maybeSingle(),
+      supabaseClient.from('post_shares').select('id').eq('post_id',post.id).eq('user_id',currentUser.id).maybeSingle()
+    ]);
+    liked=!!l;shared=!!s;
+  }
+  like.textContent=(liked?'♥ Ti piace':'♡ Mi piace')+' · '+(likes||0);
+  like.style.color=liked?'#f05b79':'';
+  comment.textContent='💬 Commenti · '+(comments||0);
+  share.textContent=(shared?'↩ Annulla ricondivisione':'↗ Ricondividi')+' · '+(shares||0);
+  share.style.color=shared?'var(--gold)':'';
+}
+async function openComments(post,article,interactions){
+  const panel=document.createElement('div');panel.className='comment-panel mini';
+  const title=document.createElement('strong');title.textContent='Commenti';panel.append(title);
+  const list=document.createElement('div');list.style.marginTop='10px';panel.append(list);
+  const loading=document.createElement('p');loading.className='muted';loading.textContent='Caricamento commenti…';list.append(loading);
+  const form=document.createElement('form');form.style.display='flex';form.style.gap='8px';form.style.marginTop='12px';
+  const input=document.createElement('input');input.type='text';input.maxLength=2000;input.required=true;input.placeholder='Scrivi un commento…';input.style.flex='1';input.style.minWidth='0';input.style.background='var(--bg)';input.style.border='1px solid var(--line)';input.style.borderRadius='9px';input.style.padding='10px';input.style.color='white';
+  const send=document.createElement('button');send.type='submit';send.className='btn';send.textContent='Invia';form.append(input,send);panel.append(form);interactions.append(panel);
+  async function reload(){
+    list.innerHTML='<p class="muted">Caricamento commenti…</p>';
+    const {data,error}=await supabaseClient.from('post_comments').select('id,author_id,content,created_at').eq('post_id',post.id).order('created_at',{ascending:true}).limit(100);
+    list.innerHTML='';
+    if(error){const p=document.createElement('p');p.className='auth-message';p.textContent='Errore nel caricamento dei commenti: '+error.message;list.append(p);return;}
+    if(!data?.length){const p=document.createElement('p');p.className='muted';p.textContent='Ancora nessun commento. Sii il primo!';list.append(p);return;}
+    const ids=[...new Set(data.map(c=>c.author_id))];
+    const {data:profiles}=await supabaseClient.from('profiles').select('id,full_name,username').in('id',ids);
+    const map=new Map((profiles||[]).map(p=>[p.id,p]));
+    data.forEach(c=>{const item=document.createElement('div');item.style.padding='8px 0';item.style.borderBottom='1px solid var(--line)';const author=map.get(c.author_id);const strong=document.createElement('strong');strong.textContent=author?.full_name||('@'+(author?.username||'utente'));const body=document.createElement('div');body.textContent=c.content;const date=document.createElement('div');date.className='muted';date.textContent=new Date(c.created_at).toLocaleString('it-IT');item.append(strong,body,date);list.append(item);});
+  }
+  form.addEventListener('submit',async e=>{e.preventDefault();const value=input.value.trim();if(!value)return;send.disabled=true;const {error}=await supabaseClient.from('post_comments').insert({post_id:post.id,author_id:currentUser.id,content:value});send.disabled=false;if(error){setPostMessage('Commento non pubblicato: '+error.message,true);return;}input.value='';await reload();const buttons=article.querySelectorAll('.postfoot button');if(buttons.length===3)await refreshPostInteractions(post,buttons[0],buttons[1],buttons[2]);});
+  await reload();
+}
 function makePostCard(post, profile) {
   const article = document.createElement('article'); article.className = 'card post';
   const head = document.createElement('div'); head.className = 'posthead';
@@ -304,10 +347,45 @@ function makePostCard(post, profile) {
     article.append(media);
   }
   const foot = document.createElement('div'); foot.className = 'postfoot';
-  const like = document.createElement('button'); like.className = 'like'; like.textContent = '♡ Mi piace';
-  const comment = document.createElement('button'); comment.textContent = '💬 Commenta';
-  const share = document.createElement('button'); share.textContent = '↗ Condividi';
-  foot.append(like,comment,share); article.append(foot); return article;
+  const like = document.createElement('button'); like.type='button'; like.className = 'like'; like.textContent = '♡ Mi piace';
+  const comment = document.createElement('button'); comment.type='button'; comment.textContent = '💬 Commenti';
+  const share = document.createElement('button'); share.type='button'; share.textContent = '↗ Ricondividi';
+  foot.append(like,comment,share); article.append(foot);
+  const interactions = document.createElement('div'); interactions.className='post-interactions';
+  interactions.style.marginTop='10px';
+  article.append(interactions);
+  like.addEventListener('click', async () => {
+    if (!currentUser) { authCard.classList.remove('hidden'); showAuthMessage('Accedi per mettere Mi piace.'); return; }
+    like.disabled=true;
+    try {
+      const {data: existing,error: checkError}=await supabaseClient.from('post_likes').select('id').eq('post_id',post.id).eq('user_id',currentUser.id).maybeSingle();
+      if(checkError) throw checkError;
+      if(existing){ const {error}=await supabaseClient.from('post_likes').delete().eq('id',existing.id); if(error) throw error; }
+      else { const {error}=await supabaseClient.from('post_likes').insert({post_id:post.id,user_id:currentUser.id}); if(error) throw error; }
+      await refreshPostInteractions(post,like,comment,share);
+    } catch(error){ setPostMessage('Mi piace non riuscito: '+error.message,true); }
+    finally{like.disabled=false;}
+  });
+  comment.addEventListener('click', async () => {
+    if(!currentUser){authCard.classList.remove('hidden');showAuthMessage('Accedi per commentare.');return;}
+    const panel=article.querySelector('.comment-panel');
+    if(panel){panel.remove();return;}
+    await openComments(post,article,interactions);
+  });
+  share.addEventListener('click', async () => {
+    if(!currentUser){authCard.classList.remove('hidden');showAuthMessage('Accedi per ricondividere.');return;}
+    share.disabled=true;
+    try{
+      const {data:existing,error:checkError}=await supabaseClient.from('post_shares').select('id').eq('post_id',post.id).eq('user_id',currentUser.id).maybeSingle();
+      if(checkError) throw checkError;
+      if(existing){const {error}=await supabaseClient.from('post_shares').delete().eq('id',existing.id);if(error)throw error;}
+      else{const {error}=await supabaseClient.from('post_shares').insert({post_id:post.id,user_id:currentUser.id});if(error)throw error;}
+      await refreshPostInteractions(post,like,comment,share);
+    }catch(error){setPostMessage('Ricondivisione non riuscita: '+error.message,true);}
+    finally{share.disabled=false;}
+  });
+  refreshPostInteractions(post,like,comment,share);
+  return article;
 }
 
 async function loadPosts() {
@@ -350,12 +428,6 @@ document.getElementById('publish').addEventListener('click', async () => {
     if (uploadedPath) await supabaseClient.storage.from('post-media').remove([uploadedPath]);
     setPostMessage('Pubblicazione non riuscita: ' + (error.message || 'errore sconosciuto'), true);
   } finally { publishButton.disabled = false; }
-});
-document.addEventListener('click',e=>{
-  if(e.target.classList.contains('like')){
-    e.target.textContent=e.target.textContent.includes('♡')?'♥ Ti piace':'♡ Mi piace';
-    e.target.style.color=e.target.textContent.includes('♥')?'#f05b79':'';
-  }
 });
 document.querySelectorAll('.nav').forEach(n=>n.addEventListener('click',()=>{
   document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));
