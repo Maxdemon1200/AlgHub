@@ -132,7 +132,7 @@ signOut.addEventListener("click", async () => {
   else { renderAuth(null); showAuthMessage("Hai effettuato la disconnessione."); }
 });
 supabaseClient.auth.onAuthStateChange((_event, session) => { renderAuth(session?.user || null); if (session?.user) loadPosts(); });
-supabaseClient.auth.getSession().then(({ data, error }) => {
+supabaseClient.auth.getSession().then(async ({ data, error }) => {
   if (error) showAuthMessage(error.message, true);
   renderAuth(data?.session?.user || null);
   await loadPosts();
