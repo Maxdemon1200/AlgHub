@@ -64,6 +64,12 @@ function setAuthMode(register) {
   document.getElementById("authPassword").autocomplete = register ? "new-password" : "current-password";
   showAuthMessage("");
 }
+function promptLogin(message) {
+  authCard.classList.remove("hidden");
+  if (currentUser) renderAuth(currentUser);
+  showAuthMessage(message);
+  authCard.scrollIntoView({ behavior: "smooth", block: "center" });
+}
 function renderAuth(user) {
   currentUser = user || null;
   document.getElementById("userLabel").textContent = user ? (user.user_metadata?.full_name || user.email) : "Non connesso";
@@ -355,7 +361,7 @@ function makePostCard(post, profile) {
   interactions.style.marginTop='10px';
   article.append(interactions);
   like.addEventListener('click', async () => {
-    if (!currentUser) { authCard.classList.remove('hidden'); showAuthMessage('Accedi per mettere Mi piace.'); return; }
+    if (!currentUser) { promptLogin('Accedi ad AlgHub per mettere Mi piace ai post.'); return; }
     like.disabled=true;
     try {
       const {data: existing,error: checkError}=await supabaseClient.from('post_likes').select('id').eq('post_id',post.id).eq('user_id',currentUser.id).maybeSingle();
@@ -367,13 +373,13 @@ function makePostCard(post, profile) {
     finally{like.disabled=false;}
   });
   comment.addEventListener('click', async () => {
-    if(!currentUser){authCard.classList.remove('hidden');showAuthMessage('Accedi per commentare.');return;}
+    if(!currentUser){promptLogin('Accedi ad AlgHub per commentare i post.');return;}
     const panel=article.querySelector('.comment-panel');
     if(panel){panel.remove();return;}
     await openComments(post,article,interactions);
   });
   share.addEventListener('click', async () => {
-    if(!currentUser){authCard.classList.remove('hidden');showAuthMessage('Accedi per ricondividere.');return;}
+    if(!currentUser){promptLogin('Accedi ad AlgHub per ricondividere i post.');return;}
     share.disabled=true;
     try{
       const {data:existing,error:checkError}=await supabaseClient.from('post_shares').select('id').eq('post_id',post.id).eq('user_id',currentUser.id).maybeSingle();
