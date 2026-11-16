@@ -5,6 +5,25 @@
 <meta name="theme-color" content="#10152b"><link rel="manifest" href="./manifest.json"><title>AlgHub — La città, connessa.</title>
 <style>
 :root{--bg:#0b1020;--panel:#141c33;--panel2:#1b2540;--line:#293451;--text:#f4f6ff;--muted:#9ba8c7;--gold:#ffbd35;--pink:#f05b79;--blue:#627cff}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px Inter,system-ui,Arial}button,input,textarea{font:inherit}button{cursor:pointer;border:0}.top{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 max(18px,calc((100% - 1180px)/2));background:#10172b;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}.brand{font-weight:900;font-size:25px;letter-spacing:-1px}.brand b{color:var(--gold)}.search{width:min(38vw,390px);background:var(--panel2);border:1px solid var(--line);border-radius:30px;padding:11px 16px;color:white}.wrap{max-width:1180px;margin:24px auto;padding:0 16px;display:grid;grid-template-columns:220px minmax(0,620px) 260px;gap:22px}.side,.card{background:var(--panel);border:1px solid var(--line);border-radius:18px}.side{padding:14px;height:max-content;position:sticky;top:86px}.nav{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;color:#dce3fa;cursor:pointer}.nav:hover,.nav.active{background:var(--panel2);color:var(--gold)}.nav span{font-size:19px;width:24px}.card{padding:16px;margin-bottom:16px}.stories{display:flex;gap:14px;overflow:auto}.story{text-align:center;min-width:64px;font-size:12px;color:var(--muted)}.ring{width:58px;height:58px;border-radius:50%;padding:3px;margin:auto auto 6px;background:linear-gradient(135deg,var(--gold),var(--pink),var(--blue))}.ring div{height:100%;border-radius:50%;background:var(--panel2);display:grid;place-items:center;font-size:23px;border:2px solid var(--panel)}.composer textarea{width:100%;resize:vertical;min-height:64px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;color:white}.actions{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}.btn{background:var(--gold);color:#171827;font-weight:800;padding:10px 16px;border-radius:10px}.soft{background:var(--panel2);color:var(--text);padding:9px 12px;border-radius:10px}.posthead{display:flex;align-items:center;gap:10px}.avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#334b83,#e45d75);font-weight:800}.muted{color:var(--muted);font-size:12px}.post p{line-height:1.55}.postimg{width:100%;height:250px;object-fit:cover;border-radius:14px;background:linear-gradient(135deg,#1b3154,#7b465b);display:grid;place-items:center;font-size:56px;margin-top:12px}.postfoot{display:flex;gap:18px;padding-top:12px;border-top:1px solid var(--line);color:var(--muted)}.postfoot button{background:none;color:inherit}.right h3{margin:4px 0 12px}.mini{padding:12px;border-radius:12px;background:var(--panel2);margin:9px 0}.profile-result{cursor:pointer;border:1px solid transparent}.profile-result:hover{border-color:var(--gold);background:#222e4d}.profile-cover{padding:20px;border-radius:14px;background:linear-gradient(120deg,#263d70,#6a385f);margin:12px 0}.tag{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:.7px}.demo{font-size:10px;color:#ffcf70;border:1px solid #6e5729;border-radius:20px;padding:3px 8px;margin-left:6px}.hidden{display:none}.section-title{font-size:22px;margin:4px 0 14px}.mobile-nav{display:none}.top-right{display:flex;align-items:center;gap:12px}.auth-card h2{margin:0 0 5px;font-size:21px}.auth-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.auth-card label{display:block;margin:12px 0 6px;color:var(--muted);font-size:13px}.auth-card input{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px;color:white}.auth-card .actions{justify-content:flex-start}.auth-message{font-size:13px;line-height:1.45;color:var(--gold);min-height:18px}.auth-card form{max-width:480px}.auth-card .hidden{display:none!important}.media-preview{margin-top:12px;padding:10px;background:var(--panel2);border:1px solid var(--line);border-radius:12px}.media-preview img,.media-preview video{display:block;max-width:100%;max-height:360px;margin:8px auto 0;border-radius:10px}.media-preview button{margin-top:8px}@media(max-width:900px){.wrap{grid-template-columns:190px 1fr}.right{display:none}}@media(max-width:650px){.wrap{padding-bottom:68px}.mobile-nav{overflow-x:auto}.mobile-nav button{min-width:34px}.top{padding:0 10px;gap:8px}.brand{font-size:21px}.search{display:block;width:min(42vw,210px);padding:9px 11px;font-size:13px}.wrap{display:block;margin:12px auto;padding:0 10px}.side{display:none}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:8;background:#10172b;border-top:1px solid var(--line);justify-content:space-around;padding:10px 4px}.mobile-nav button{background:none;color:var(--muted);font-size:18px;padding:4px}.mobile-nav button:focus{color:var(--gold)}.card{border-radius:14px;padding:13px}.postimg{height:210px}.top{height:58px}}
+
+/* Commenti stile social */
+.comment-overlay{position:fixed;inset:0;z-index:60;background:#050914c9;display:flex;justify-content:flex-end;align-items:stretch;backdrop-filter:blur(3px)}
+.comment-dialog{width:min(480px,100%);height:100%;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;box-shadow:-16px 0 50px #0007;animation:commentIn .18s ease-out}
+.comment-dialog-head{height:58px;flex:0 0 58px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line);position:relative;font-weight:800}
+.comment-close{position:absolute;right:14px;background:none;color:var(--text);font-size:24px;padding:4px 8px}
+.comment-list{padding:14px 16px;overflow-y:auto;flex:1;min-height:0}
+.comment-row{display:flex;align-items:flex-start;gap:11px;padding:10px 0}
+.comment-avatar{width:36px;height:36px;flex:0 0 36px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#334b83,#e45d75);font-size:12px;font-weight:800;overflow:hidden;background-size:cover;background-position:center}
+.comment-content{min-width:0;line-height:1.45;overflow-wrap:anywhere}
+.comment-content strong{font-size:13px;margin-right:6px}
+.comment-text{font-size:14px;white-space:pre-wrap}
+.comment-date{font-size:11px;color:var(--muted);margin-top:4px}
+.comment-form{display:flex;align-items:center;gap:10px;padding:12px 14px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--panel)}
+.comment-input{min-width:0;flex:1;border:1px solid var(--line);border-radius:24px;background:var(--panel2);color:white;padding:11px 15px;outline:none}
+.comment-send{background:none;color:var(--gold);font-weight:800;padding:10px 4px}
+.comment-send:disabled{opacity:.45}
+@keyframes commentIn{from{transform:translateX(18px);opacity:.6}to{transform:translateX(0);opacity:1}}
+@media(max-width:650px){.comment-overlay{align-items:flex-end;justify-content:center}.comment-dialog{width:100%;height:min(84vh,760px);border:1px solid var(--line);border-bottom:0;border-radius:18px 18px 0 0;animation:commentUp .2s ease-out}.comment-dialog-head{border-radius:18px 18px 0 0}@keyframes commentUp{from{transform:translateY(35px);opacity:.7}to{transform:translateY(0);opacity:1}}}
 </style></head>
 <body>
 <header class="top"><div class="brand">Alg<b>Hub</b></div><input class="search" id="searchInput" type="search" placeholder="Cerca persone, post, luoghi…" aria-label="Cerca su AlgHub"><div class="top-right"><button class="soft" id="notificationBell" type="button" aria-label="Notifiche" title="Notifiche" style="position:relative">🔔 <span id="notificationCount" style="font-size:11px">0</span></button><span id="userLabel" class="muted">Non connesso</span><button class="soft" id="authToggle">Accedi</button><span>📍 <strong>Alghero</strong></span></div></header>
@@ -322,26 +341,52 @@ async function refreshPostInteractions(post,like,comment,share){
   share.style.color=shared?'var(--gold)':'';
 }
 async function openComments(post,article,interactions){
-  const panel=document.createElement('div');panel.className='comment-panel mini';
-  const title=document.createElement('strong');title.textContent='Commenti';panel.append(title);
-  const list=document.createElement('div');list.style.marginTop='10px';panel.append(list);
-  const loading=document.createElement('p');loading.className='muted';loading.textContent='Caricamento commenti…';list.append(loading);
-  const form=document.createElement('form');form.style.display='flex';form.style.gap='8px';form.style.marginTop='12px';
-  const input=document.createElement('input');input.type='text';input.maxLength=2000;input.required=true;input.placeholder='Scrivi un commento…';input.style.flex='1';input.style.minWidth='0';input.style.background='var(--bg)';input.style.border='1px solid var(--line)';input.style.borderRadius='9px';input.style.padding='10px';input.style.color='white';
-  const send=document.createElement('button');send.type='submit';send.className='btn';send.textContent='Invia';form.append(input,send);panel.append(form);interactions.append(panel);
+  const overlay=document.createElement('div');overlay.className='comment-overlay';overlay.setAttribute('role','presentation');
+  const dialog=document.createElement('section');dialog.className='comment-dialog';dialog.setAttribute('role','dialog');dialog.setAttribute('aria-modal','true');dialog.setAttribute('aria-label','Commenti del post');
+  const header=document.createElement('div');header.className='comment-dialog-head';header.textContent='Commenti';
+  const close=document.createElement('button');close.type='button';close.className='comment-close';close.setAttribute('aria-label','Chiudi commenti');close.textContent='×';header.append(close);
+  const list=document.createElement('div');list.className='comment-list';list.innerHTML='<p class="muted">Caricamento commenti…</p>';
+  const form=document.createElement('form');form.className='comment-form';
+  const input=document.createElement('input');input.type='text';input.className='comment-input';input.maxLength=2000;input.required=true;input.placeholder='Aggiungi un commento…';input.setAttribute('aria-label','Scrivi un commento');
+  const send=document.createElement('button');send.type='submit';send.className='comment-send';send.textContent='Pubblica';form.append(input,send);
+  dialog.append(header,list,form);overlay.append(dialog);document.body.append(overlay);
+  const closePanel=()=>{overlay.remove();document.removeEventListener('keydown',onKey);};
+  const onKey=e=>{if(e.key==='Escape')closePanel();};
+  close.addEventListener('click',closePanel);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closePanel();});
+  document.addEventListener('keydown',onKey);
   async function reload(){
     list.innerHTML='<p class="muted">Caricamento commenti…</p>';
     const {data,error}=await supabaseClient.from('post_comments').select('id,author_id,content,created_at').eq('post_id',post.id).order('created_at',{ascending:true}).limit(100);
     list.innerHTML='';
     if(error){const p=document.createElement('p');p.className='auth-message';p.textContent='Errore nel caricamento dei commenti: '+error.message;list.append(p);return;}
-    if(!data?.length){const p=document.createElement('p');p.className='muted';p.textContent='Ancora nessun commento. Sii il primo!';list.append(p);return;}
+    if(!data?.length){const p=document.createElement('p');p.className='muted';p.style.textAlign='center';p.style.padding='28px 8px';p.textContent='Ancora nessun commento. Sii il primo!';list.append(p);return;}
     const ids=[...new Set(data.map(c=>c.author_id))];
-    const {data:profiles}=await supabaseClient.from('profiles').select('id,full_name,username').in('id',ids);
+    const {data:profiles}=await supabaseClient.from('profiles').select('id,full_name,username,avatar_url').in('id',ids);
     const map=new Map((profiles||[]).map(p=>[p.id,p]));
-    data.forEach(c=>{const item=document.createElement('div');item.style.padding='8px 0';item.style.borderBottom='1px solid var(--line)';const author=map.get(c.author_id);const strong=document.createElement('strong');strong.textContent=author?.full_name||('@'+(author?.username||'utente'));const body=document.createElement('div');body.textContent=c.content;const date=document.createElement('div');date.className='muted';date.textContent=new Date(c.created_at).toLocaleString('it-IT');item.append(strong,body,date);list.append(item);});
+    data.forEach(c=>{
+      const author=map.get(c.author_id);const item=document.createElement('div');item.className='comment-row';
+      const avatar=document.createElement('div');avatar.className='comment-avatar';avatar.textContent=(author?.full_name||author?.username||'AH').slice(0,2).toUpperCase();
+      if(author?.avatar_url){avatar.textContent='';avatar.style.backgroundImage='url("'+author.avatar_url.replace(/"/g,'%22')+'")';}
+      const content=document.createElement('div');content.className='comment-content';
+      const strong=document.createElement('strong');strong.textContent=author?.full_name||('@'+(author?.username||'utente'));
+      const body=document.createElement('span');body.className='comment-text';body.textContent=c.content;
+      const date=document.createElement('div');date.className='comment-date';date.textContent=new Date(c.created_at).toLocaleString('it-IT',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+      content.append(strong,body,date);item.append(avatar,content);list.append(item);
+    });
+    list.scrollTop=list.scrollHeight;
   }
-  form.addEventListener('submit',async e=>{e.preventDefault();const value=input.value.trim();if(!value)return;send.disabled=true;const {error}=await supabaseClient.from('post_comments').insert({post_id:post.id,author_id:currentUser.id,content:value});send.disabled=false;if(error){setPostMessage('Commento non pubblicato: '+error.message,true);return;}input.value='';await reload();const buttons=article.querySelectorAll('.postfoot button');if(buttons.length===3)await refreshPostInteractions(post,buttons[0],buttons[1],buttons[2]);});
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();if(!currentUser){closePanel();promptLogin('Accedi ad AlgHub per pubblicare un commento.');return;}
+    const value=input.value.trim();if(!value)return;send.disabled=true;send.textContent='…';
+    const {error}=await supabaseClient.from('post_comments').insert({post_id:post.id,author_id:currentUser.id,content:value});
+    send.disabled=false;send.textContent='Pubblica';
+    if(error){const p=document.createElement('p');p.className='auth-message';p.textContent='Commento non pubblicato: '+error.message;form.insertAdjacentElement('beforebegin',p);return;}
+    input.value='';await reload();const buttons=article.querySelectorAll('.postfoot button');if(buttons.length===3)await refreshPostInteractions(post,buttons[0],buttons[1],buttons[2]);input.focus();
+  });
+  if(!currentUser){input.disabled=true;input.placeholder='Accedi per scrivere un commento';send.disabled=true;}
   await reload();
+  if(currentUser)input.focus();
 }
 function makePostCard(post, profile) {
   const article = document.createElement('article'); article.className = 'card post';
@@ -380,9 +425,6 @@ function makePostCard(post, profile) {
     finally{like.disabled=false;}
   });
   comment.addEventListener('click', async () => {
-    if(!currentUser){promptLogin('Accedi ad AlgHub per commentare i post.');return;}
-    const panel=article.querySelector('.comment-panel');
-    if(panel){panel.remove();return;}
     await openComments(post,article,interactions);
   });
   share.addEventListener('click', async () => {
