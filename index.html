@@ -391,11 +391,16 @@ async function openComments(post,article,interactions){
 function makePostCard(post, profile) {
   const article = document.createElement('article'); article.className = 'card post';
   const head = document.createElement('div'); head.className = 'posthead';
-  const avatar = document.createElement('div'); avatar.className = 'avatar'; avatar.textContent = (profile?.full_name || profile?.username || 'AH').slice(0,2).toUpperCase();
-  const meta = document.createElement('div');
+  const avatar = document.createElement('div'); avatar.className = 'avatar'; avatar.style.cursor='pointer'; avatar.textContent = (profile?.full_name || profile?.username || 'AH').slice(0,2).toUpperCase();
+  if(profile?.avatar_url){avatar.textContent='';avatar.style.backgroundImage='url("'+profile.avatar_url.replace(/"/g,'%22')+'")';avatar.style.backgroundSize='cover';avatar.style.backgroundPosition='center';}
+  const meta = document.createElement('div'); meta.style.cursor='pointer';meta.style.minWidth='0';
   const name = document.createElement('strong'); name.textContent = profile?.full_name || (profile?.username ? '@' + profile.username : 'Utente AlgHub');
+  const username = document.createElement('div'); username.className='muted';username.textContent=profile?.username?'@'+profile.username:'';
   const date = document.createElement('div'); date.className = 'muted'; date.textContent = new Date(post.created_at).toLocaleString('it-IT');
-  meta.append(name,date); head.append(avatar,meta); article.append(head);
+  meta.append(name,username,date); head.append(avatar,meta); article.append(head);
+  const goToProfile=()=>{if(post.author_id)openUserProfile(post.author_id);};
+  [avatar,meta].forEach(el=>{el.setAttribute('role','button');el.setAttribute('tabindex','0');el.setAttribute('aria-label','Apri il profilo di '+(profile?.full_name||profile?.username||'utente'));el.addEventListener('click',goToProfile);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();goToProfile();}});});
+  head.title='Apri il profilo';
   if (post.content) { const p = document.createElement('p'); p.textContent = post.content; article.append(p); }
   if (post.media_url) {
     const media = document.createElement(post.media_type?.startsWith('video/') ? 'video' : 'img');
@@ -487,7 +492,7 @@ async function loadPosts() {
   feed.innerHTML = '';
   if (!data?.length) { const empty = document.createElement('div'); empty.className = 'card muted'; empty.textContent = 'Ancora nessun post. Condividi il primo momento con la città!'; feed.append(empty); return; }
   const ids = [...new Set(data.map(p => p.author_id))];
-  const { data: profiles } = await supabaseClient.from('profiles').select('id,full_name,username').in('id', ids);
+  const { data: profiles } = await supabaseClient.from('profiles').select('id,full_name,username,avatar_url').in('id', ids);
   const profileMap = new Map((profiles || []).map(p => [p.id,p]));
   data.forEach(post => feed.append(makePostCard(post, profileMap.get(post.author_id))));
 }
