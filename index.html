@@ -423,6 +423,29 @@ function makePostCard(post, profile) {
   const username = document.createElement('div'); username.className='muted';username.textContent=profile?.username?'@'+profile.username:'';
   const date = document.createElement('div'); date.className = 'muted'; date.textContent = new Date(post.created_at).toLocaleString('it-IT');
   meta.append(name,username,date); head.append(avatar,meta); article.append(head);
+  if(currentUser && currentUser.id===post.author_id){
+    const deleteButton=document.createElement('button');
+    deleteButton.type='button';deleteButton.className='soft';
+    deleteButton.textContent='🗑️ Elimina post';
+    deleteButton.style.marginLeft='auto';deleteButton.style.flexShrink='0';
+    deleteButton.setAttribute('aria-label','Elimina definitivamente questo post');
+    deleteButton.addEventListener('click',async()=>{
+      if(!confirm('Vuoi eliminare definitivamente questo post? Non sarà più visibile a nessuno.'))return;
+      deleteButton.disabled=true;deleteButton.textContent='Eliminazione…';
+      const {error}=await supabaseClient.from('posts').delete().eq('id',post.id).eq('author_id',currentUser.id);
+      if(error){deleteButton.disabled=false;deleteButton.textContent='🗑️ Elimina post';alert('Eliminazione non riuscita: '+error.message);return;}
+      article.remove();
+      if(post.media_url){
+        try{
+          const marker='/post-media/';
+          const at=post.media_url.indexOf(marker);
+          if(at>=0){const path=decodeURIComponent(post.media_url.slice(at+marker.length).split('?')[0]);await supabaseClient.storage.from('post-media').remove([path]);}
+        }catch(storageError){console.warn('Post eliminato; pulizia file multimediale non riuscita:',storageError);}
+      }
+      if(document.getElementById('feed'))await loadPosts();
+    });
+    head.append(deleteButton);
+  }
   const goToProfile=()=>{if(post.author_id)openUserProfile(post.author_id);};
   [avatar,meta].forEach(el=>{el.setAttribute('role','button');el.setAttribute('tabindex','0');el.setAttribute('aria-label','Apri il profilo di '+(profile?.full_name||profile?.username||'utente'));el.addEventListener('click',goToProfile);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();goToProfile();}});});
   head.title='Apri il profilo';
