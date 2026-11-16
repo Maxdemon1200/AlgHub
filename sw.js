@@ -5,8 +5,8 @@ self.addEventListener('push', event => {
   try { data = event.data ? event.data.json() : {}; } catch (_) { data = { body: event.data?.text() || '' }; }
   event.waitUntil(self.registration.showNotification(data.title || 'AlgHub', {
     body: data.body || 'Hai una nuova notifica.',
-    icon: './icon-192.png',
-    badge: './icon-192.png',
+    icon: './icon.svg',
+    badge: './icon.svg',
     data: { url: data.url || './' }
   }));
 });
