@@ -1,0 +1,11 @@
+{
+  "name": "AlgHub — La città, connessa.",
+  "short_name": "AlgHub",
+  "start_url": "/AlgHub/",
+  "scope": "/AlgHub/",
+  "display": "standalone",
+  "background_color": "#0b1020",
+  "theme_color": "#10152b",
+  "description": "La community locale di Alghero e dintorni.",
+  "icons": []
+}
