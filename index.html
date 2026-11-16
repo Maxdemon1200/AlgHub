@@ -4,13 +4,27 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#10152b"><title>AlgHub — La città, connessa.</title>
 <style>
-:root{--bg:#0b1020;--panel:#141c33;--panel2:#1b2540;--line:#293451;--text:#f4f6ff;--muted:#9ba8c7;--gold:#ffbd35;--pink:#f05b79;--blue:#627cff}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px Inter,system-ui,Arial}button,input,textarea{font:inherit}button{cursor:pointer;border:0}.top{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 max(18px,calc((100% - 1180px)/2));background:#10172b;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}.brand{font-weight:900;font-size:25px;letter-spacing:-1px}.brand b{color:var(--gold)}.search{width:min(38vw,390px);background:var(--panel2);border:1px solid var(--line);border-radius:30px;padding:11px 16px;color:white}.wrap{max-width:1180px;margin:24px auto;padding:0 16px;display:grid;grid-template-columns:220px minmax(0,620px) 260px;gap:22px}.side,.card{background:var(--panel);border:1px solid var(--line);border-radius:18px}.side{padding:14px;height:max-content;position:sticky;top:86px}.nav{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;color:#dce3fa;cursor:pointer}.nav:hover,.nav.active{background:var(--panel2);color:var(--gold)}.nav span{font-size:19px;width:24px}.card{padding:16px;margin-bottom:16px}.stories{display:flex;gap:14px;overflow:auto}.story{text-align:center;min-width:64px;font-size:12px;color:var(--muted)}.ring{width:58px;height:58px;border-radius:50%;padding:3px;margin:auto auto 6px;background:linear-gradient(135deg,var(--gold),var(--pink),var(--blue))}.ring div{height:100%;border-radius:50%;background:var(--panel2);display:grid;place-items:center;font-size:23px;border:2px solid var(--panel)}.composer textarea{width:100%;resize:vertical;min-height:64px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;color:white}.actions{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}.btn{background:var(--gold);color:#171827;font-weight:800;padding:10px 16px;border-radius:10px}.soft{background:var(--panel2);color:var(--text);padding:9px 12px;border-radius:10px}.posthead{display:flex;align-items:center;gap:10px}.avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#334b83,#e45d75);font-weight:800}.muted{color:var(--muted);font-size:12px}.post p{line-height:1.55}.postimg{width:100%;height:250px;object-fit:cover;border-radius:14px;background:linear-gradient(135deg,#1b3154,#7b465b);display:grid;place-items:center;font-size:56px;margin-top:12px}.postfoot{display:flex;gap:18px;padding-top:12px;border-top:1px solid var(--line);color:var(--muted)}.postfoot button{background:none;color:inherit}.right h3{margin:4px 0 12px}.mini{padding:12px;border-radius:12px;background:var(--panel2);margin:9px 0}.tag{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:.7px}.demo{font-size:10px;color:#ffcf70;border:1px solid #6e5729;border-radius:20px;padding:3px 8px;margin-left:6px}.hidden{display:none}.section-title{font-size:22px;margin:4px 0 14px}.mobile-nav{display:none}@media(max-width:900px){.wrap{grid-template-columns:190px 1fr}.right{display:none}}@media(max-width:650px){.top{padding:0 14px}.search{display:none}.wrap{display:block;margin:12px auto;padding:0 10px}.side{display:none}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:8;background:#10172b;border-top:1px solid var(--line);justify-content:space-around;padding:10px 4px}.mobile-nav button{background:none;color:var(--muted);font-size:20px}.mobile-nav button:focus{color:var(--gold)}.card{border-radius:14px;padding:13px}.postimg{height:210px}.top{height:58px}}
+:root{--bg:#0b1020;--panel:#141c33;--panel2:#1b2540;--line:#293451;--text:#f4f6ff;--muted:#9ba8c7;--gold:#ffbd35;--pink:#f05b79;--blue:#627cff}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px Inter,system-ui,Arial}button,input,textarea{font:inherit}button{cursor:pointer;border:0}.top{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 max(18px,calc((100% - 1180px)/2));background:#10172b;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}.brand{font-weight:900;font-size:25px;letter-spacing:-1px}.brand b{color:var(--gold)}.search{width:min(38vw,390px);background:var(--panel2);border:1px solid var(--line);border-radius:30px;padding:11px 16px;color:white}.wrap{max-width:1180px;margin:24px auto;padding:0 16px;display:grid;grid-template-columns:220px minmax(0,620px) 260px;gap:22px}.side,.card{background:var(--panel);border:1px solid var(--line);border-radius:18px}.side{padding:14px;height:max-content;position:sticky;top:86px}.nav{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;color:#dce3fa;cursor:pointer}.nav:hover,.nav.active{background:var(--panel2);color:var(--gold)}.nav span{font-size:19px;width:24px}.card{padding:16px;margin-bottom:16px}.stories{display:flex;gap:14px;overflow:auto}.story{text-align:center;min-width:64px;font-size:12px;color:var(--muted)}.ring{width:58px;height:58px;border-radius:50%;padding:3px;margin:auto auto 6px;background:linear-gradient(135deg,var(--gold),var(--pink),var(--blue))}.ring div{height:100%;border-radius:50%;background:var(--panel2);display:grid;place-items:center;font-size:23px;border:2px solid var(--panel)}.composer textarea{width:100%;resize:vertical;min-height:64px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;color:white}.actions{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}.btn{background:var(--gold);color:#171827;font-weight:800;padding:10px 16px;border-radius:10px}.soft{background:var(--panel2);color:var(--text);padding:9px 12px;border-radius:10px}.posthead{display:flex;align-items:center;gap:10px}.avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#334b83,#e45d75);font-weight:800}.muted{color:var(--muted);font-size:12px}.post p{line-height:1.55}.postimg{width:100%;height:250px;object-fit:cover;border-radius:14px;background:linear-gradient(135deg,#1b3154,#7b465b);display:grid;place-items:center;font-size:56px;margin-top:12px}.postfoot{display:flex;gap:18px;padding-top:12px;border-top:1px solid var(--line);color:var(--muted)}.postfoot button{background:none;color:inherit}.right h3{margin:4px 0 12px}.mini{padding:12px;border-radius:12px;background:var(--panel2);margin:9px 0}.tag{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:.7px}.demo{font-size:10px;color:#ffcf70;border:1px solid #6e5729;border-radius:20px;padding:3px 8px;margin-left:6px}.hidden{display:none}.section-title{font-size:22px;margin:4px 0 14px}.mobile-nav{display:none}.top-right{display:flex;align-items:center;gap:12px}.auth-card h2{margin:0 0 5px;font-size:21px}.auth-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.auth-card label{display:block;margin:12px 0 6px;color:var(--muted);font-size:13px}.auth-card input{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px;color:white}.auth-card .actions{justify-content:flex-start}.auth-message{font-size:13px;line-height:1.45;color:var(--gold);min-height:18px}.auth-card form{max-width:480px}.auth-card .hidden{display:none!important}@media(max-width:900px){.wrap{grid-template-columns:190px 1fr}.right{display:none}}@media(max-width:650px){.top{padding:0 14px}.search{display:none}.wrap{display:block;margin:12px auto;padding:0 10px}.side{display:none}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:8;background:#10172b;border-top:1px solid var(--line);justify-content:space-around;padding:10px 4px}.mobile-nav button{background:none;color:var(--muted);font-size:20px}.mobile-nav button:focus{color:var(--gold)}.card{border-radius:14px;padding:13px}.postimg{height:210px}.top{height:58px}}
 </style></head>
 <body>
-<header class="top"><div class="brand">Alg<b>Hub</b></div><input class="search" placeholder="Cerca persone, luoghi, attività…"><div>📍 <strong>Alghero</strong></div></header>
+<header class="top"><div class="brand">Alg<b>Hub</b></div><input class="search" placeholder="Cerca persone, luoghi, attività…"><div class="top-right"><span id="userLabel" class="muted">Non connesso</span><button class="soft" id="authToggle">Accedi</button><span>📍 <strong>Alghero</strong></span></div></header>
 <div class="wrap">
 <aside class="side"><div class="nav active" data-page="home"><span>⌂</span> Home</div><div class="nav" data-page="news"><span>📰</span> Notizie locali</div><div class="nav" data-page="events"><span>📅</span> Eventi</div><div class="nav" data-page="market"><span>🛍️</span> Mercatino</div><div class="nav" data-page="work"><span>💼</span> Lavoro</div><div class="nav" data-page="tourism"><span>🌊</span> Turismo</div><div class="nav" data-page="places"><span>📍</span> La città</div><div class="nav" data-page="profile"><span>👤</span> Il mio profilo</div></aside>
 <main id="main">
+<section class="card auth-card hidden" id="authCard">
+  <div class="auth-heading"><div><h2 id="authTitle">Accedi ad AlgHub</h2><p class="muted" id="authSubtitle">Entra nella community della tua città.</p></div><button class="soft" id="authClose" type="button">Chiudi</button></div>
+  <form id="authForm">
+    <div id="registerFields" class="hidden">
+      <label for="fullName">Nome e cognome</label><input id="fullName" autocomplete="name" placeholder="Il tuo nome completo">
+      <label for="username">Nome utente</label><input id="username" autocomplete="username" placeholder="es. mario_rossi">
+    </div>
+    <label for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="email" required placeholder="nome@email.it">
+    <label for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="current-password" minlength="8" required placeholder="Almeno 8 caratteri">
+    <p id="authMessage" class="auth-message" role="status"></p>
+    <div class="actions"><button class="btn" id="authSubmit" type="submit">Accedi</button><button class="soft" id="authMode" type="button">Crea un account</button></div>
+  </form>
+  <button class="soft hidden" id="signOut" type="button">Esci dall’account</button>
+</section>
 <section class="card"><div class="stories"><div class="story"><div class="ring"><div>＋</div></div>La tua storia</div><div class="story"><div class="ring"><div>🌅</div></div>Alghero</div><div class="story"><div class="ring"><div>🍕</div></div>Food</div><div class="story"><div class="ring"><div>🎉</div></div>Eventi</div><div class="story"><div class="ring"><div>🏖️</div></div>Spiagge</div><div class="story"><div class="ring"><div>🐚</div></div>Sardegna</div></div></section>
 <section class="card composer"><strong>Condividi qualcosa con la città</strong><textarea id="postText" placeholder="A cosa stai pensando?"></textarea><div class="actions"><span class="muted">📷 Foto &nbsp; 🎬 Video <span class="demo">ANTEPRIMA</span></span><button class="btn" id="publish">Pubblica</button></div></section>
 <div id="feed"><article class="card post"><div class="posthead"><div class="avatar">AH</div><div><strong>AlgHub · Benvenuti</strong><div class="muted">Anteprima dimostrativa · Alghero</div></div></div><p>La città, connessa. Questo è lo spazio della comunità di Alghero: condividi momenti, scopri attività, eventi e novità del territorio.</p><div class="postimg">🌅</div><div class="postfoot"><button class="like">♡ Mi piace</button><button>💬 Commenta</button><button>↗ Condividi</button></div></article></div>
@@ -18,8 +32,132 @@
 <aside class="right"><section class="card"><h3>Alghero oggi <span class="demo">DEMO</span></h3><div class="mini"><div class="tag">La comunità</div><strong>Il tuo spazio locale</strong><p class="muted">Persone, idee e attività del territorio.</p></div></section><section class="card"><h3>In evidenza</h3><div class="mini">📍 <strong>Scopri il territorio</strong><div class="muted">Luoghi, servizi e attività locali</div></div><div class="mini">🎉 <strong>Vivi gli eventi</strong><div class="muted">Iniziative e appuntamenti</div></div><div class="mini">💼 <strong>Opportunità di lavoro</strong><div class="muted">Annunci della zona</div></div></section><p class="muted">AlgHub © 2026 · Prototipo in anteprima</p></aside>
 </div>
 <nav class="mobile-nav"><button>⌂</button><button>📰</button><button>＋</button><button>🛍️</button><button>👤</button></nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-document.getElementById('publish').addEventListener('click',()=>{const box=document.getElementById('postText');const value=box.value.trim();if(!value){alert('Scrivi qualcosa prima di pubblicare.');return}const article=document.createElement('article');article.className='card post';const p=document.createElement('p');p.textContent=value;const head=document.createElement('div');head.className='posthead';head.innerHTML='<div class="avatar">TU</div><div><strong>Il tuo post</strong><div class="muted">Solo in questa anteprima</div></div>';const foot=document.createElement('div');foot.className='postfoot';foot.innerHTML='<button class="like">♡ Mi piace</button><button>💬 Commenta</button><button>↗ Condividi</button>';article.append(head,p,foot);document.getElementById('feed').prepend(article);box.value='';});
-document.addEventListener('click',e=>{if(e.target.classList.contains('like')){e.target.textContent=e.target.textContent.includes('♡')?'♥ Ti piace':'♡ Mi piace';e.target.style.color=e.target.textContent.includes('♥')?'#f05b79':''}});
-document.querySelectorAll('.nav').forEach(n=>n.addEventListener('click',()=>{document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));n.classList.add('active');if(n.dataset.page!=='home')alert('La sezione '+n.textContent.trim()+' sarà sviluppata nella prossima fase. Questa è un’anteprima grafica.');}));
+const SUPABASE_URL = "https://gktgetkywuqxbdcrmcgr.supabase.co";
+const SUPABASE_KEY = "sb_publishable_nrM9QYQqe7eKnScRAUYuHg_MLAgc2Gd";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const authCard = document.getElementById("authCard");
+const authToggle = document.getElementById("authToggle");
+const authForm = document.getElementById("authForm");
+const authMessage = document.getElementById("authMessage");
+const authTitle = document.getElementById("authTitle");
+const authSubtitle = document.getElementById("authSubtitle");
+const authSubmit = document.getElementById("authSubmit");
+const authMode = document.getElementById("authMode");
+const registerFields = document.getElementById("registerFields");
+const signOut = document.getElementById("signOut");
+let isRegister = false;
+let currentUser = null;
+
+function showAuthMessage(message, isError = false) {
+  authMessage.textContent = message;
+  authMessage.style.color = isError ? "#ff8b9c" : "var(--gold)";
+}
+function setAuthMode(register) {
+  isRegister = register;
+  authTitle.textContent = register ? "Crea il tuo account" : "Accedi ad AlgHub";
+  authSubtitle.textContent = register ? "Unisciti alla community di Alghero e dintorni." : "Entra nella community della tua città.";
+  authSubmit.textContent = register ? "Registrati" : "Accedi";
+  authMode.textContent = register ? "Ho già un account" : "Crea un account";
+  registerFields.classList.toggle("hidden", !register);
+  document.getElementById("authPassword").autocomplete = register ? "new-password" : "current-password";
+  showAuthMessage("");
+}
+function renderAuth(user) {
+  currentUser = user || null;
+  document.getElementById("userLabel").textContent = user ? (user.user_metadata?.full_name || user.email) : "Non connesso";
+  authToggle.textContent = user ? "Account" : "Accedi";
+  document.getElementById("publish").disabled = !user;
+  document.getElementById("publish").style.opacity = user ? "1" : ".55";
+  if (user) {
+    authTitle.textContent = "Il tuo account";
+    authSubtitle.textContent = "Sei connesso ad AlgHub.";
+    authForm.classList.add("hidden");
+    signOut.classList.remove("hidden");
+  } else {
+    authForm.classList.remove("hidden");
+    signOut.classList.add("hidden");
+    setAuthMode(false);
+  }
+}
+authToggle.addEventListener("click", () => {
+  authCard.classList.toggle("hidden");
+  if (currentUser) renderAuth(currentUser);
+});
+document.getElementById("authClose").addEventListener("click", () => authCard.classList.add("hidden"));
+authMode.addEventListener("click", () => setAuthMode(!isRegister));
+authForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  authSubmit.disabled = true;
+  showAuthMessage(isRegister ? "Creazione account in corso…" : "Accesso in corso…");
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  try {
+    if (isRegister) {
+      const fullName = document.getElementById("fullName").value.trim();
+      const username = document.getElementById("username").value.trim().toLowerCase().replace(/[^a-z0-9_.]/g, "");
+      if (!fullName || username.length < 3) throw new Error("Inserisci nome completo e un nome utente di almeno 3 caratteri (lettere, numeri, punto o underscore).");
+      const { data, error } = await supabaseClient.auth.signUp({
+        email, password,
+        options: {
+          data: { full_name: fullName, username },
+          emailRedirectTo: window.location.origin + window.location.pathname
+        }
+      });
+      if (error) throw error;
+      if (data.session) {
+        showAuthMessage("Account creato. Sei entrato in AlgHub.");
+        renderAuth(data.user);
+      } else {
+        showAuthMessage("Registrazione avviata! Controlla la tua email e clicca sul link di conferma per attivare l’account.");
+      }
+    } else {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      showAuthMessage("Accesso effettuato.");
+      renderAuth(data.user);
+    }
+  } catch (error) {
+    showAuthMessage(error.message || "Si è verificato un errore. Riprova.", true);
+  } finally {
+    authSubmit.disabled = false;
+  }
+});
+signOut.addEventListener("click", async () => {
+  const { error } = await supabaseClient.auth.signOut();
+  if (error) showAuthMessage(error.message, true);
+  else { renderAuth(null); showAuthMessage("Hai effettuato la disconnessione."); }
+});
+supabaseClient.auth.onAuthStateChange((_event, session) => renderAuth(session?.user || null));
+supabaseClient.auth.getSession().then(({ data, error }) => {
+  if (error) showAuthMessage(error.message, true);
+  renderAuth(data?.session?.user || null);
+});
+
+document.getElementById('publish').addEventListener('click',()=>{
+  if(!currentUser){authCard.classList.remove('hidden');showAuthMessage("Accedi prima di pubblicare.");return}
+  const box=document.getElementById('postText');const value=box.value.trim();
+  if(!value){alert('Scrivi qualcosa prima di pubblicare.');return}
+  const article=document.createElement('article');article.className='card post';
+  const p=document.createElement('p');p.textContent=value;
+  const head=document.createElement('div');head.className='posthead';
+  const name=currentUser.user_metadata?.full_name || currentUser.email;
+  head.innerHTML='<div class="avatar">TU</div><div><strong></strong><div class="muted">Anteprima locale · non ancora visibile agli altri</div></div>';
+  head.querySelector('strong').textContent=name;
+  const foot=document.createElement('div');foot.className='postfoot';
+  foot.innerHTML='<button class="like">♡ Mi piace</button><button>💬 Commenta</button><button>↗ Condividi</button>';
+  article.append(head,p,foot);document.getElementById('feed').prepend(article);box.value='';
+});
+document.addEventListener('click',e=>{
+  if(e.target.classList.contains('like')){
+    e.target.textContent=e.target.textContent.includes('♡')?'♥ Ti piace':'♡ Mi piace';
+    e.target.style.color=e.target.textContent.includes('♥')?'#f05b79':'';
+  }
+});
+document.querySelectorAll('.nav').forEach(n=>n.addEventListener('click',()=>{
+  document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));
+  n.classList.add('active');
+  if(n.dataset.page!=='home')alert('La sezione '+n.textContent.trim()+' sarà sviluppata nella prossima fase. Questa è un’anteprima grafica.');
+}));
 </script></body></html>
