@@ -95,9 +95,29 @@ img,video,iframe,canvas,svg{max-width:100%}
 /* Etichette leggibili nella barra di navigazione mobile */
 @media(max-width:650px){.mobile-nav{align-items:stretch;gap:0;padding:5px 1px calc(5px + env(safe-area-inset-bottom))}.mobile-nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;min-height:52px;padding:5px 0;font-size:inherit;line-height:1.1}.mobile-nav-icon{font-size:18px;line-height:1.15}.mobile-nav-label{display:block;font-size:9px;font-weight:650;letter-spacing:-.2px;white-space:nowrap;color:inherit}}
 @media(max-width:370px){.mobile-nav-label{font-size:8px}.mobile-nav-icon{font-size:17px}}
+
+/* Menu laterale mobile */
+.mobile-menu-toggle{display:none;background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:10px;width:40px;height:40px;font-size:21px;align-items:center;justify-content:center;flex:0 0 40px}
+.mobile-drawer-backdrop{display:none}
+@media(max-width:650px){
+ .mobile-menu-toggle{display:flex}
+ .mobile-nav{display:none!important}
+ .top{justify-content:flex-start}
+ .brand{flex:0 0 auto}
+ .mobile-drawer-backdrop{display:block;position:fixed;inset:0;z-index:100;background:#030713b8;opacity:0;visibility:hidden;transition:opacity .22s,visibility .22s}
+ .mobile-drawer-backdrop.open{opacity:1;visibility:visible}
+ .mobile-drawer{position:absolute;left:0;top:0;bottom:0;width:min(82vw,310px);padding:calc(16px + env(safe-area-inset-top)) 14px calc(16px + env(safe-area-inset-bottom));background:#111a30;border-right:1px solid var(--line);box-shadow:16px 0 45px #0008;transform:translateX(-102%);transition:transform .22s ease;overflow-y:auto}
+ .mobile-drawer-backdrop.open .mobile-drawer{transform:translateX(0)}
+ .mobile-drawer-head{display:flex;align-items:center;justify-content:space-between;padding:4px 4px 18px;border-bottom:1px solid var(--line);margin-bottom:12px;font-size:18px}
+ .mobile-drawer-head button{background:var(--panel2);color:var(--text);border-radius:9px;width:36px;height:36px;font-size:18px}
+ .mobile-drawer-links{display:flex;flex-direction:column;gap:5px}
+ .mobile-drawer-links button{display:flex;align-items:center;gap:14px;width:100%;padding:13px 12px;border-radius:12px;background:transparent;color:var(--text);text-align:left;font-weight:650;font-size:15px}
+ .mobile-drawer-links button span{width:25px;text-align:center;font-size:20px}
+ .mobile-drawer-links button:active,.mobile-drawer-links button.active{background:var(--panel2);color:var(--gold)}
+}
 </style></head>
 <body>
-<header class="top"><div class="brand"><img class="brand-logo" src="https://gktgetkywuqxbdcrmcgr.supabase.co/storage/v1/object/public/post-media/7fd6461a-4290-422e-b8ea-cac7424f535c/f16bc2b1-eecf-4c42-8d5f-397db66e46b6.jpeg" alt="Logo AlgHub"><span>Alg<b>Hub</b></span></div><input class="search" id="searchInput" type="search" placeholder="Cerca persone, post, luoghi…" aria-label="Cerca su AlgHub"><div class="top-right"><button class="soft" id="notificationBell" type="button" aria-label="Notifiche" title="Notifiche" style="position:relative">🔔 <span id="notificationCount" style="font-size:11px">0</span></button><span id="userLabel" class="muted">Non connesso</span><button class="soft" id="authToggle">Accedi</button><span>📍 <strong>Alghero</strong></span></div></header>
+<header class="top"><button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="Apri menu" aria-expanded="false">☰</button><div class="brand"><img class="brand-logo" src="https://gktgetkywuqxbdcrmcgr.supabase.co/storage/v1/object/public/post-media/7fd6461a-4290-422e-b8ea-cac7424f535c/f16bc2b1-eecf-4c42-8d5f-397db66e46b6.jpeg" alt="Logo AlgHub"><span>Alg<b>Hub</b></span></div><input class="search" id="searchInput" type="search" placeholder="Cerca persone, post, luoghi…" aria-label="Cerca su AlgHub"><div class="top-right"><button class="soft" id="notificationBell" type="button" aria-label="Notifiche" title="Notifiche" style="position:relative">🔔 <span id="notificationCount" style="font-size:11px">0</span></button><span id="userLabel" class="muted">Non connesso</span><button class="soft" id="authToggle">Accedi</button><span>📍 <strong>Alghero</strong></span></div></header><div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" aria-hidden="true"><aside class="mobile-drawer" id="mobileDrawer" aria-label="Menu principale"><div class="mobile-drawer-head"><strong>Menu AlgHub</strong><button type="button" id="mobileMenuClose" aria-label="Chiudi menu">✕</button></div><nav class="mobile-drawer-links"><button data-page="home"><span>⌂</span> Home</button><button data-page="news"><span>📰</span> Notizie</button><button data-page="events"><span>📅</span> Eventi</button><button data-page="market"><span>🛍️</span> Mercatino</button><button data-page="work"><span>💼</span> Lavoro</button><button data-page="tourism"><span>🌊</span> Turismo</button><button data-page="places"><span>📍</span> La città</button><button data-page="profile"><span>👤</span> Profilo</button></nav></aside></div>
 <section id="notificationPanel" class="card hidden" style="position:fixed;z-index:20;right:16px;top:76px;width:min(390px,calc(100vw - 24px));max-height:70vh;overflow:auto;box-shadow:0 12px 40px #0009"><div style="display:flex;justify-content:space-between;align-items:center"><strong>Le tue notifiche</strong><button id="markNotificationsRead" class="soft" type="button">Segna tutte come lette</button></div><div id="notificationList" style="margin-top:10px"></div></section>
 <div class="wrap">
 <aside class="side"><div class="nav active" data-page="home"><span>⌂</span> Home</div><div class="nav" data-page="news"><span>📰</span> Notizie locali</div><div class="nav" data-page="events"><span>📅</span> Eventi</div><div class="nav" data-page="market"><span>🛍️</span> Mercatino</div><div class="nav" data-page="work"><span>💼</span> Lavoro</div><div class="nav" data-page="tourism"><span>🌊</span> Turismo</div><div class="nav" data-page="places"><span>📍</span> La città</div><div class="nav" data-page="profile"><span>👤</span> Il mio profilo</div></aside>
@@ -124,7 +144,7 @@ img,video,iframe,canvas,svg{max-width:100%}
 </main>
 <aside class="right"><section class="card"><h3>Alghero oggi <span class="demo">DEMO</span></h3><div class="mini"><div class="tag">La comunità</div><strong>Il tuo spazio locale</strong><p class="muted">Persone, idee e attività del territorio.</p></div></section><section class="card"><h3>In evidenza</h3><div class="mini">📍 <strong>Scopri il territorio</strong><div class="muted">Luoghi, servizi e attività locali</div></div><div class="mini">🎉 <strong>Vivi gli eventi</strong><div class="muted">Iniziative e appuntamenti</div></div><div class="mini">💼 <strong>Opportunità di lavoro</strong><div class="muted">Annunci della zona</div></div></section><p class="muted">AlgHub © 2026 · Prototipo in anteprima</p></aside>
 </div>
-<nav class="mobile-nav"><button data-page="home" aria-label="Home"><span class="mobile-nav-icon">⌂</span><span class="mobile-nav-label">Home</span></button><button data-page="news" aria-label="Notizie"><span class="mobile-nav-icon">📰</span><span class="mobile-nav-label">Notizie</span></button><button data-page="events" aria-label="Eventi"><span class="mobile-nav-icon">📅</span><span class="mobile-nav-label">Eventi</span></button><button data-page="market" aria-label="Mercatino"><span class="mobile-nav-icon">🛍️</span><span class="mobile-nav-label">Mercato</span></button><button data-page="work" aria-label="Lavoro"><span class="mobile-nav-icon">💼</span><span class="mobile-nav-label">Lavoro</span></button><button data-page="tourism" aria-label="Turismo"><span class="mobile-nav-icon">🌊</span><span class="mobile-nav-label">Turismo</span></button><button data-page="places" aria-label="La città"><span class="mobile-nav-icon">📍</span><span class="mobile-nav-label">Città</span></button><button data-page="profile" aria-label="Profilo"><span class="mobile-nav-icon">👤</span><span class="mobile-nav-label">Profilo</span></button></nav>
+<nav class="mobile-nav" aria-hidden="true"><button data-page="home" aria-label="Home"><span class="mobile-nav-icon">⌂</span><span class="mobile-nav-label">Home</span></button><button data-page="news" aria-label="Notizie"><span class="mobile-nav-icon">📰</span><span class="mobile-nav-label">Notizie</span></button><button data-page="events" aria-label="Eventi"><span class="mobile-nav-icon">📅</span><span class="mobile-nav-label">Eventi</span></button><button data-page="market" aria-label="Mercatino"><span class="mobile-nav-icon">🛍️</span><span class="mobile-nav-label">Mercato</span></button><button data-page="work" aria-label="Lavoro"><span class="mobile-nav-icon">💼</span><span class="mobile-nav-label">Lavoro</span></button><button data-page="tourism" aria-label="Turismo"><span class="mobile-nav-icon">🌊</span><span class="mobile-nav-label">Turismo</span></button><button data-page="places" aria-label="La città"><span class="mobile-nav-icon">📍</span><span class="mobile-nav-label">Città</span></button><button data-page="profile" aria-label="Profilo"><span class="mobile-nav-icon">👤</span><span class="mobile-nav-label">Profilo</span></button></nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(err => console.error('Service worker:',err)));
@@ -760,5 +780,16 @@ function navigateTo(page){
  window.scrollTo({top:0,behavior:'smooth'});
 }
 document.querySelectorAll('.nav,.mobile-nav button[data-page]').forEach(n=>n.addEventListener('click',()=>navigateTo(n.dataset.page)));
+
+
+const mobileDrawerBackdrop=document.getElementById('mobileDrawerBackdrop');
+const mobileMenuToggle=document.getElementById('mobileMenuToggle');
+function closeMobileMenu(){mobileDrawerBackdrop?.classList.remove('open');mobileDrawerBackdrop?.setAttribute('aria-hidden','true');mobileMenuToggle?.setAttribute('aria-expanded','false');}
+function openMobileMenu(){mobileDrawerBackdrop?.classList.add('open');mobileDrawerBackdrop?.setAttribute('aria-hidden','false');mobileMenuToggle?.setAttribute('aria-expanded','true');}
+mobileMenuToggle?.addEventListener('click',openMobileMenu);
+document.getElementById('mobileMenuClose')?.addEventListener('click',closeMobileMenu);
+mobileDrawerBackdrop?.addEventListener('click',e=>{if(e.target===mobileDrawerBackdrop)closeMobileMenu();});
+mobileDrawerBackdrop?.querySelectorAll('button[data-page]').forEach(b=>b.addEventListener('click',()=>{navigateTo(b.dataset.page);closeMobileMenu();}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMobileMenu();});
 
 </script></body></html>
