@@ -9,10 +9,10 @@
   "description": "La community locale di Alghero e dintorni.",
   "icons": [
     {
-      "src": "./icon.svg",
+      "src": "https://gktgetkywuqxbdcrmcgr.supabase.co/storage/v1/object/public/post-media/7fd6461a-4290-422e-b8ea-cac7424f535c/f16bc2b1-eecf-4c42-8d5f-397db66e46b6.jpeg",
       "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "type": "image/jpeg",
+      "purpose": "any"
     }
   ]
 }
