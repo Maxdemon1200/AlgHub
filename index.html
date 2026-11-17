@@ -842,7 +842,7 @@ const PHARMACY_DIRECTORY_DATA={
  MANNAZZU:{name:'Farmacia Mannazzu',address:'Via XX Settembre, 36/38 · Alghero',phone:'079 979489'},
  MULAS:{name:'Farmacia Mulas',address:'Via Don Giovanni Minzoni, 118 · Alghero',phone:'079 951236'},
  'S. MICHELE':{name:'Farmacia San Michele',address:'Via De Gasperi, 36 · Alghero',phone:'079 6766269'},
- MUGONI:{name:'Farmacia Mugoni',address:'Dati di indirizzo e telefono non presenti nell’elenco consultato',phone:''}
+ MUGONI:{name:'Farmacia Mugoni',address:'Contatti non presenti nell’elenco ufficiale consultato',phone:''}
 };
 function pharmacyDateFromItalian(value){const [d,m,y]=value.split('/').map(Number);return new Date(y,m-1,d,12,0,0);}
 function pharmacyDateLabel(date){return date.toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'});}
@@ -851,9 +851,9 @@ async function findOfficialPharmacyPdf(){
   const page=await fetch(PHARMACY_TURNS_PAGE,{cache:'no-store'});
   if(!page.ok)throw new Error('Pagina ufficiale non raggiungibile');
   const html=await page.text();
-  const links=[...html.matchAll(/<a\\b[^>]*href=["']([^"']+\\.pdf[^"']*)["'][^>]*>([\\s\\S]*?)<\\/a>/gi)];
-  const match=links.find(x=>/alghero/i.test(x[1]+' '+x[2])&&/turni/i.test(x[2]));
-  if(match)return new URL(match[1],PHARMACY_TURNS_PAGE).href;
+  const doc=new DOMParser().parseFromString(html,'text/html');
+  const link=[...doc.querySelectorAll('a[href]')].find(a=>/alghero/i.test(a.href+' '+a.textContent)&&/turni/i.test(a.textContent)&&/\.pdf/i.test(a.href));
+  if(link)return new URL(link.getAttribute('href'),PHARMACY_TURNS_PAGE).href;
  }catch(error){console.warn('Ricerca PDF turni non riuscita:',error);}
  return PHARMACY_TURNS_FALLBACK;
 }
@@ -870,18 +870,17 @@ async function readOfficialPharmacyTurns(){
   const page=await pdf.getPage(pageNo);const content=await page.getTextContent();
   allText+=' '+content.items.map(item=>item.str||'').join(' ');
  }
- allText=allText.replace(/\\s+/g,' ').toUpperCase();
+ allText=allText.replace(/\s+/g,' ').toUpperCase();
  const now=new Date(),today=new Date(now.getFullYear(),now.getMonth(),now.getDate(),12);
- const aliases=Object.keys(PHARMACY_DIRECTORY_DATA).map(x=>x.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\loadAlgheroWeather();
-setInterval(loadAlgheroWeather,30*60*1000);')).join('|');
- const weeklyRegex=new RegExp('(\\d{2}\\/\\d{2}\\/\\d{4})\\s+(\\d{2}\\/\\d{2}\\/\\d{4})\\s+('+aliases+')\\b','g');
+ const aliases='BULLA|CABRAS|CARGIAGHE|ROSARIO|CIRIOLO|FOIS|MANNAZZU|MULAS|S\.?\s*MICHELE|MUGONI';
+ const weeklyRegex=new RegExp('(\\d{2}/\\d{2}/\\d{4})\\s+(\\d{2}/\\d{2}/\\d{4})\\s+('+aliases+')\\b','g');
  const weekly=[];let match;
  while((match=weeklyRegex.exec(allText))!==null){
   const from=pharmacyDateFromItalian(match[1]),to=pharmacyDateFromItalian(match[2]);
-  if(today>=from&&today<=to)weekly.push({key:match[3].replace(/\\s+/g,' ').trim(),from,to});
+  if(today>=from&&today<=to)weekly.push({key:match[3].replace(/\s+/g,' ').trim(),from,to});
  }
- const holidayRegex=new RegExp('(?:LUNED[IÌ]|MARTED[IÌ]|MERCOLED[IÌ]|GIOVED[IÌ]|VENERD[IÌ]|SABATO|DOMENICA)?\\s*(\\d{2}\\/\\d{2}\\/\\d{4})\\s+('+aliases+')\\b','g');
- const holidays=[];while((match=holidayRegex.exec(allText))!==null){const date=pharmacyDateFromItalian(match[1]);if(date.getTime()===today.getTime())holidays.push({key:match[2].replace(/\\s+/g,' ').trim(),date});}
+ const holidayRegex=new RegExp('(?:LUNED[IÌ]|MARTED[IÌ]|MERCOLED[IÌ]|GIOVED[IÌ]|VENERD[IÌ]|SABATO|DOMENICA)\\s+(\\d{2}/\\d{2}/\\d{4})\\s+('+aliases+')\\b','g');
+ const holidays=[];while((match=holidayRegex.exec(allText))!==null){const date=pharmacyDateFromItalian(match[1]);if(date.getTime()===today.getTime())holidays.push({key:match[2].replace(/\s+/g,' ').trim(),date});}
  const selected=holidays[0]||weekly[0];
  if(!selected)throw new Error('Il PDF ufficiale non contiene un turno riconoscibile per la data odierna.');
  return {selected,isHoliday:holidays.length>0,pdfUrl};
@@ -892,7 +891,7 @@ function renderPharmacyTurn(data){
  if(!pharmacy){result.textContent='Turno individuato ma farmacia non riconosciuta nell’elenco ufficiale.';return;}
  const type=data.isHoliday?'Turno festivo':'Reperibilità settimanale';
  const period=data.isHoliday?pharmacyDateLabel(data.selected.date):pharmacyDateLabel(data.selected.from)+' – '+pharmacyDateLabel(data.selected.to);
- result.innerHTML='<div class="tag">💊 '+type.toUpperCase()+'</div><h3>'+pharmacy.name+'</h3><div class="pharmacy-detail">📍 '+pharmacy.address+'</div>'+(pharmacy.phone?'<div class="pharmacy-detail">☎️ '+pharmacy.phone+'</div><a class="pharmacy-call" href="tel:'+pharmacy.phone.replace(/\\s/g,'')+'">Chiama la farmacia</a>':'<div class="pharmacy-detail">Contatti non verificati: consulta l’elenco ufficiale.</div>')+'<p style="margin:14px 0 4px;font-weight:750">Validità: '+period+'</p><p class="muted">Il documento distingue la reperibilità settimanale dai turni festivi. Conferma telefonicamente prima di partire.</p><p class="muted">Documento ufficiale: <a href="'+data.pdfUrl+'" target="_blank" rel="noopener noreferrer">consulta il PDF dei turni ↗</a></p>';
+ result.innerHTML='<div class="tag">💊 '+type.toUpperCase()+'</div><h3>'+pharmacy.name+'</h3><div class="pharmacy-detail">📍 '+pharmacy.address+'</div>'+(pharmacy.phone?'<div class="pharmacy-detail">☎️ '+pharmacy.phone+'</div><a class="pharmacy-call" href="tel:'+pharmacy.phone.replace(/\s/g,'')+'">Chiama la farmacia</a>':'<div class="pharmacy-detail">Contatti non verificati: consulta l’elenco ufficiale.</div>')+'<p style="margin:14px 0 4px;font-weight:750">Validità: '+period+'</p><p class="muted">Il documento distingue la reperibilità settimanale dai turni festivi. Conferma telefonicamente prima di partire.</p><p class="muted">Documento ufficiale: <a href="'+data.pdfUrl+'" target="_blank" rel="noopener noreferrer">consulta il PDF dei turni ↗</a></p>';
 }
 async function loadPharmacyTurns(){
  const result=document.getElementById('pharmacyTurnResult'),stamp=document.getElementById('pharmacyUpdatedAt'),refresh=document.getElementById('refreshPharmacyTurns');
@@ -910,7 +909,6 @@ document.getElementById('closePharmacyTurns')?.addEventListener('click',closePha
 document.getElementById('refreshPharmacyTurns')?.addEventListener('click',loadPharmacyTurns);
 pharmacyModal?.addEventListener('click',e=>{if(e.target===pharmacyModal)closePharmacyModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closePharmacyModal();});
-
 async function loadHomeLocalUpdates(){const sportBox=document.getElementById('homeSportItems'),obitBox=document.getElementById('homeObituaryItems');if(!sportBox||!obitBox)return;const [s,o]=await Promise.all([supabaseClient.from('imported_items').select('id,section,category,title,description,source_name,source_url,canonical_url,image_url,published_at,imported_at').eq('section','sport').order('published_at',{ascending:false,nullsFirst:false}).limit(3),supabaseClient.from('imported_items').select('id,section,category,title,description,source_name,source_url,canonical_url,image_url,published_at,imported_at').eq('section','obituaries').order('published_at',{ascending:false,nullsFirst:false}).limit(3)]);sportBox.innerHTML='';obitBox.innerHTML='';if(s.error){sportBox.textContent='Aggiornamenti sportivi momentaneamente non disponibili.';}else if(s.data?.length){s.data.forEach(x=>sportBox.append(importedEntryCard(x)));}else{sportBox.innerHTML='<p class="muted">Nessuna notizia sportiva locale disponibile al momento.</p>';}if(o.error){obitBox.textContent='Necrologi momentaneamente non disponibili.';}else if(o.data?.length){o.data.forEach(x=>obitBox.append(importedEntryCard(x)));}else{obitBox.innerHTML='<p class="muted">Nessun avviso disponibile al momento.</p>';}}
 
 loadHomeLocalUpdates();
