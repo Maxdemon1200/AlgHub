@@ -688,6 +688,20 @@ const pageMeta={
  places:{title:'La città',icon:'📍',intro:'Una bacheca comunitaria per attività, servizi e informazioni utili. Verifica sempre i dati prima di utilizzarli.',formTitle:'Aggiungi un luogo o servizio',button:'Aggiungi alla città',category:['Attività','Servizi','Uffici pubblici','Trasporti','Parcheggi','Farmacie','Numeri utili','Altro'],fields:['location','contact']}
 };
 function escapeText(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+function importedEntryCard(item){
+ const card=document.createElement('article');card.className='card imported-entry';
+ const top=document.createElement('div');top.style.display='flex';top.style.justifyContent='space-between';top.style.alignItems='center';top.style.gap='10px';
+ const tag=document.createElement('span');tag.className='tag';tag.textContent='📰 '+(item.category||'Notizia locale');
+ const date=document.createElement('span');date.className='muted';const when=item.published_at||item.imported_at;date.textContent=when?new Date(when).toLocaleString('it-IT'):'Aggiornato da AlgHub';
+ top.append(tag,date);
+ const source=document.createElement('div');source.className='muted';source.style.marginTop='10px';source.textContent='Fonte: '+(item.source_name||'Fonte esterna');
+ const title=document.createElement('h3');title.style.margin='10px 0 6px';title.textContent=item.title;
+ const desc=document.createElement('p');desc.style.whiteSpace='pre-wrap';desc.style.lineHeight='1.55';desc.textContent=item.description||'Apri la fonte per leggere tutti i dettagli.';
+ card.append(top,source,title,desc);
+ if(item.image_url){const img=document.createElement('img');img.src=item.image_url;img.alt='';img.loading='lazy';img.style.cssText='display:block;width:100%;max-height:280px;object-fit:cover;border-radius:12px;margin:10px 0';img.onerror=()=>img.remove();card.append(img);}
+ const link=document.createElement('a');link.href=item.canonical_url;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Leggi la notizia originale ↗';link.style.cssText='display:inline-block;margin-top:8px;color:var(--gold);font-weight:800;text-decoration:none';card.append(link);
+ return card;
+}
 function entryCard(entry,author){
  const card=document.createElement('article');card.className='card';
  const top=document.createElement('div');top.style.display='flex';top.style.justifyContent='space-between';top.style.gap='10px';
@@ -707,16 +721,23 @@ function entryCard(entry,author){
 let currentPage='home';
 async function loadSectionEntries(page){
  const list=document.getElementById('sectionEntries');if(!list)return;
- list.innerHTML='<p class="muted">Caricamento contenuti…</p>';
- let q=supabaseClient.from('local_entries').select('id,section,category,title,description,location,contact,price,event_date,author_id,created_at').eq('section',page).order('created_at',{ascending:false}).limit(100);
- if(page==='events')q=q.gte('event_date',new Date(Date.now()-86400000).toISOString()).order('event_date',{ascending:true});
- const {data,error}=await q;
- list.innerHTML='';
- if(error){list.textContent='Errore nel caricamento: '+error.message;return;}
- if(!data?.length){list.innerHTML='<div class="card muted">Non ci sono ancora contenuti in questa sezione. Puoi essere il primo a pubblicare.</div>';return;}
+ const importedList=document.getElementById('importedSectionEntries');
+ list.innerHTML='<p class="muted">Caricamento contenuti…</p>';if(importedList)importedList.innerHTML='';
+ const importedQuery=supabaseClient.from('imported_items').select('id,section,category,title,description,source_name,source_url,canonical_url,image_url,published_at,imported_at').eq('section',page).order('published_at',{ascending:false,nullsFirst:false}).limit(60);
+ let communityQuery=supabaseClient.from('local_entries').select('id,section,category,title,description,location,contact,price,event_date,author_id,created_at').eq('section',page).order('created_at',{ascending:false}).limit(100);
+ if(page==='events')communityQuery=communityQuery.gte('event_date',new Date(Date.now()-86400000).toISOString()).order('event_date',{ascending:true});
+ const [importedResult,communityResult]=await Promise.all([importedQuery,communityQuery]);
+ list.innerHTML='';if(importedList)importedList.innerHTML='';
+ if(importedResult.error){if(importedList)importedList.textContent='Errore nel caricamento delle notizie: '+importedResult.error.message;}
+ else if(importedResult.data?.length){importedResult.data.forEach(item=>importedList?.append(importedEntryCard(item)));}
+ else if(importedList){importedList.innerHTML='<div class="card muted">Nessun contenuto importato al momento. Il sistema continuerà a cercare nuovi aggiornamenti.</div>';}
+ const data=communityResult.data;
+ if(communityResult.error){list.textContent='Errore nel caricamento dei contenuti: '+communityResult.error.message;return;}
+ if(!data?.length){list.innerHTML='<div class="card muted">La community non ha ancora pubblicato contenuti in questa sezione.</div>';return;}
  const ids=[...new Set(data.map(x=>x.author_id))];
- const {data:profiles}=await supabaseClient.from('profiles').select('id,full_name,username').in('id',ids);
- const map=new Map((profiles||[]).map(p=>[p.id,p]));
+ let profiles=[];
+ if(ids.length){const result=await supabaseClient.from('profiles').select('id,full_name,username').in('id',ids);profiles=result.data||[];}
+ const map=new Map(profiles.map(p=>[p.id,p]));
  data.forEach(entry=>list.append(entryCard(entry,map.get(entry.author_id))));
 }
 function renderSection(page){
@@ -754,11 +775,13 @@ function renderSection(page){
   if(error){status.textContent='Errore: '+error.message;return;}
   form.reset();status.textContent='Pubblicato!';await loadSectionEntries(page);
  });
+ const importedHeading=document.createElement('section');importedHeading.innerHTML='<h3 style="margin:8px 4px 10px">Aggiornamenti automatici</h3><p class="muted" style="margin:0 4px 10px">Notizie e informazioni raccolte da fonti esterne, con collegamento alla pubblicazione originale.</p>';
+ const importedEntries=document.createElement('div');importedEntries.id='importedSectionEntries';
  const toolbar=document.createElement('div');toolbar.className='card';toolbar.innerHTML='<h3 style="margin:0 0 10px">Contenuti della community</h3>';
  const filter=document.createElement('input');filter.type='search';filter.placeholder='Filtra i contenuti…';filter.style.cssText='width:100%;padding:11px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:white';
  const entries=document.createElement('div');entries.id='sectionEntries';
  filter.addEventListener('input',()=>{const term=filter.value.toLowerCase();entries.querySelectorAll('article').forEach(card=>card.style.display=card.textContent.toLowerCase().includes(term)?'':'none');});
- toolbar.append(filter);view.append(heading,form,toolbar,entries);loadSectionEntries(page);
+ toolbar.append(filter);view.append(heading,form,importedHeading,importedEntries,toolbar,entries);loadSectionEntries(page);
 }
 async function renderMyProfile(){
  const view=document.getElementById('sectionView');view.innerHTML='<section class="card"><h2 class="section-title">Il mio profilo</h2><p class="muted">Caricamento profilo…</p></section>';
